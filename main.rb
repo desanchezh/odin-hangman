@@ -14,16 +14,11 @@ def save_game(game)
   end
 end
 
-def load_game
+def load_game # how to stop user from seeing answer in save file?
   puts 'paste your savefile link here (relative path)'
   filename = gets.chomp.to_s
   YAML.unsafe_load File.read(filename)
 end
-
-filename = 'saves/hangman_.YAML'
-# game = load_game(filename)
-
-# save_game(game)
 
 puts 'Start a new game or load a save? (new/load)'
 answer = gets.chomp
