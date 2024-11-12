@@ -1,0 +1,5 @@
+--- !ruby/object:Hangman
+incorrect_guesses: []
+correct_guesses: ['s','_','_','_','_','_','_','_','_']
+remaining_guesses: 4
+random_word: spokesman

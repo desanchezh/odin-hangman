@@ -1,0 +1,16 @@
+--- !ruby/object:Hangman
+incorrect_guesses:
+- t
+- "y"
+- r
+- b
+correct_guesses:
+- a
+- _
+- _
+- _
+- _
+- e
+- _
+remaining_guesses: 3
+random_word: allowed

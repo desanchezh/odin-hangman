@@ -1,10 +1,11 @@
 # 7 tries
-class Game
-  def initialize
+class Hangman
+  def initialize(dictionary)
     puts 'game initialized'
     @incorrect_guesses = []
     @correct_guesses = []
     @remaining_guesses = 7
+    @random_word = get_random_word(dictionary)
   end
 
   attr_reader :correct_guesses, :incorrect_guesses, :remaining_guesses, :random_word
@@ -16,6 +17,15 @@ class Game
       all_words << clean_word if clean_word.length >= 5 && clean_word.length <= 12
     end
     all_words.sample
+  end
+
+  def save_game
+    serialized_object = YAML.dump({
+                                    incorrect_guesses: game.incorrect_guesses,
+                                    correct_guesses: game.correct_guesses,
+                                    remaining_guesses: game.remaining_guesses,
+                                    random_word: game.random_word
+                                  })
   end
 
   def check_guess(guess_letter, random_word)

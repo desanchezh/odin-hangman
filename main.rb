@@ -1,19 +1,51 @@
 require_relative('lib/game')
+require 'yaml'
 
 dictionary = File.new('google-10000-english-no-swears.txt', 'r')
 
-game = Game.new
-p random_word = game.get_random_word(dictionary)
-while game.remaining_guesses.positive?
+def save_game(game)
+  serialized_object = YAML.dump(game)
+  Dir.mkdir('saves') unless Dir.exist?('saves')
 
-  if game.correct_guesses.join('') == random_word
-    puts 'you win!'
-    puts "the word was: #{random_word}"
-    exit
-  else
-    puts 'Guess a letter'
-    letter = gets.chomp.downcase
-    game.check_guess(letter, random_word)
+  filename = "saves/hangman_#{game.correct_guesses.join('')}.YAML"
+
+  File.open(filename, 'w') do |file|
+    file.write(serialized_object)
   end
 end
-puts 'Game over. No more guesses remaining'
+
+def load_game
+  puts 'paste your savefile link here (relative path)'
+  filename = gets.chomp.to_s
+  YAML.unsafe_load File.read(filename)
+end
+
+filename = 'saves/hangman_.YAML'
+# game = load_game(filename)
+
+# save_game(game)
+
+puts 'Start a new game or load a save? (new/load)'
+answer = gets.chomp
+if answer == 'load'
+  game = load_game
+elsif answer == 'new'
+  game = Hangman.new(dictionary)
+end
+
+while game.remaining_guesses.positive?
+  if game.correct_guesses.join('') == game.random_word
+    puts 'you win!'
+    puts "the word was: #{game.random_word}"
+    exit
+  else
+    puts 'save game (y/n)?'
+    save = gets.chomp
+    save_game(game) if save == 'y'
+    puts 'Guess a letter'
+    letter = gets.chomp.downcase
+    game.check_guess(letter, game.random_word)
+  end
+end
+puts 'game over. no more guesses remaining'
+puts "the word was: #{game.random_word}"
